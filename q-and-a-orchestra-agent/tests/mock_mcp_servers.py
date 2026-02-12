@@ -6,6 +6,7 @@ import asyncio
 import json
 from typing import Any, Dict, List, Optional
 from unittest.mock import AsyncMock
+import pytest
 
 from integrations.mcp_github import GitHubMCPClient
 from integrations.repo_reader import RepositoryReader

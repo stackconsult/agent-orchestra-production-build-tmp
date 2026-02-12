@@ -4,7 +4,7 @@ Request Validation Schemas
 Pydantic models for comprehensive input validation and sanitization.
 """
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List, Dict, Any
 import re
 import logging
@@ -13,14 +13,15 @@ logger = logging.getLogger(__name__)
 
 class TaskProfileRequest(BaseModel):
     """Validated task profile input."""
-    task_type: str = Field(..., regex="^(qa|planning|routing|coding|summarization|vision|critic)$")
-    criticality: str = Field("medium", regex="^(low|medium|high)$")
-    latency_sensitivity: str = Field("medium", regex="^(low|medium|high)$")
+    task_type: str = Field(..., pattern="^(qa|planning|routing|coding|summarization|vision|critic)$")
+    criticality: str = Field("medium", pattern="^(low|medium|high)$")
+    latency_sensitivity: str = Field("medium", pattern="^(low|medium|high)$")
     context_size: int = Field(0, ge=0, le=200000)  # Max 200K tokens
     tool_use_required: bool = False
-    budget_sensitivity: str = Field("medium", regex="^(low|medium|high)$")
+    budget_sensitivity: str = Field("medium", pattern="^(low|medium|high)$")
     
-    @validator('context_size')
+    @field_validator('context_size')
+    @classmethod
     def validate_context_size(cls, v):
         if v < 0:
             raise ValueError("context_size must be non-negative")
@@ -30,10 +31,11 @@ class TaskProfileRequest(BaseModel):
 
 class MessageInput(BaseModel):
     """Validated LLM message input."""
-    role: str = Field(..., regex="^(user|assistant|system)$")
+    role: str = Field(..., pattern="^(user|assistant|system)$")
     content: str = Field(..., min_length=1, max_length=50000)
     
-    @validator('content')
+    @field_validator('content')
+    @classmethod
     def sanitize_content(cls, v):
         # Remove potentially dangerous characters
         v = v.strip()
@@ -55,12 +57,13 @@ class MessageInput(BaseModel):
 class InvokeModelRequest(BaseModel):
     """Validated model invocation request."""
     task: TaskProfileRequest
-    messages: List[MessageInput] = Field(..., min_items=1, max_items=100)
+    messages: List[MessageInput] = Field(..., min_length=1, max_length=100)
     tools: Optional[List[Dict[str, Any]]] = None
     temperature: Optional[float] = Field(0.7, ge=0.0, le=2.0)
     max_tokens: Optional[int] = Field(4000, ge=1, le=32000)
     
-    @validator('messages')
+    @field_validator('messages')
+    @classmethod
     def validate_messages(cls, v):
         if len(v) > 100:
             raise ValueError("Maximum 100 messages allowed per request")
@@ -78,7 +81,8 @@ class InvokeModelRequest(BaseModel):
         
         return v
     
-    @validator('tools')
+    @field_validator('tools')
+    @classmethod
     def validate_tools(cls, v):
         if v is None:
             return v
@@ -102,7 +106,8 @@ class SessionCreateRequest(BaseModel):
     user_id: Optional[str] = Field(None, min_length=1, max_length=100)
     metadata: Optional[Dict[str, Any]] = None
     
-    @validator('user_id')
+    @field_validator('user_id')
+    @classmethod
     def sanitize_user_id(cls, v):
         if v is None:
             return v
@@ -119,9 +124,10 @@ class UserInputRequest(BaseModel):
     """Validated user input request."""
     session_id: str = Field(..., min_length=1, max_length=100)
     user_input: str = Field(..., min_length=1, max_length=10000)
-    input_type: str = Field("text", regex="^(text|file|image)$")
+    input_type: str = Field("text", pattern="^(text|file|image)$")
     
-    @validator('user_input')
+    @field_validator('user_input')
+    @classmethod
     def sanitize_user_input(cls, v):
         v = v.strip()
         
@@ -134,10 +140,11 @@ class UserInputRequest(BaseModel):
 class RefinementRequest(BaseModel):
     """Validated refinement request."""
     session_id: str = Field(..., min_length=1, max_length=100)
-    refinement_type: str = Field(..., regex="^(architecture|implementation|cost|security|performance)$")
+    refinement_type: str = Field(..., pattern="^(architecture|implementation|cost|security|performance)$")
     description: str = Field(..., min_length=1, max_length=5000)
     
-    @validator('description')
+    @field_validator('description')
+    @classmethod
     def sanitize_description(cls, v):
         v = v.strip()
         

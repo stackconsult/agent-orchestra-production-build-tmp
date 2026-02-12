@@ -27,15 +27,21 @@ jobs:
       # Scan for hardcoded credentials
       - name: Detect secrets with detect-secrets
         run: |
+          cd q-and-a-orchestra-agent
           pip install detect-secrets
-          detect-secrets scan --all-files --force-use-all-plugins --baseline .secrets.baseline || echo "Detect-secrets scan completed"
+          if [ -f ".secrets.baseline" ]; then
+            detect-secrets scan --baseline .secrets.baseline || echo "Detect-secrets scan completed"
+          else
+            detect-secrets scan --all-files --force-use-all-plugins || echo "Detect-secrets scan completed"
+          fi
         continue-on-error: true
 
       # Check for vulnerable dependencies
       - name: Safety check (Python dependencies)
         run: |
+          cd q-and-a-orchestra-agent
           pip install safety
-          safety check --json || echo "Safety check completed"
+          safety scan --json || echo "Safety check completed"
         continue-on-error: true
 
       # SAST (Static Application Security Testing)
