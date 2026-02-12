@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # Redis for message bus
@@ -23,9 +23,9 @@ services:
     image: postgres:15-alpine
     container_name: orchestra-postgres
     environment:
-      POSTGRES_DB: orchestra_planner
-      POSTGRES_USER: orchestra
-      POSTGRES_PASSWORD: orchestra_password
+      POSTGRES_DB: ${POSTGRES_DB:-orchestra_planner}
+      POSTGRES_USER: ${POSTGRES_USER:-orchestra}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
     ports:
       - "5432:5432"
@@ -49,48 +49,48 @@ services:
     container_name: orchestra-agent
     ports:
       - "8000:8000"
-      - "9090:9090"  # Metrics port
+      - "9090:9090" # Metrics port
     environment:
       # Database
       DATABASE_URL: postgresql+asyncpg://orchestra:orchestra_password@postgres:5432/orchestra_planner
-      
+
       # Redis
       REDIS_URL: redis://redis:6379/0
-      
+
       # LLM
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
-      
+
       # GitHub (optional)
       GITHUB_TOKEN: ${GITHUB_TOKEN}
       GITHUB_REPO_OWNER: ${GITHUB_REPO_OWNER:-stackconsult}
       GITHUB_REPO_NAME: ${GITHUB_REPO_NAME:-Agent-orchestra-planner}
-      
+
       # Local repo path (optional)
       LOCAL_REPO_PATH: /app/repo
-      
+
       # API Configuration
       API_HOST: 0.0.0.0
       API_PORT: 8000
       DEBUG: "false"
-      
+
       # Observability
       PROMETHEUS_PORT: 9090
       LOG_LEVEL: INFO
-      
+
       # Jaeger (optional)
       JAEGER_ENDPOINT: ${JAEGER_ENDPOINT:-http://jaeger:14268/api/traces}
-      
+
       # Rate Limits
       MAX_DESIGN_ITERATIONS_PER_HOUR: 50
       MAX_IMPLEMENTATIONS_PER_DAY: 10
       MAX_CONCURRENT_OPERATIONS: 3
-      
+
       # Cost Tracking
       MONTHLY_BUDGET_LIMIT: 500
       COST_ALERT_THRESHOLD: 0.8
     volumes:
       - ./logs:/app/logs
-      - ../:/app/repo:ro  # Mount parent directory as read-only repo
+      - ../:/app/repo:ro # Mount parent directory as read-only repo
     depends_on:
       redis:
         condition: service_healthy
@@ -116,12 +116,12 @@ services:
       - ./deployment/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
-      - '--web.console.templates=/etc/prometheus/consoles'
-      - '--storage.tsdb.retention.time=200h'
-      - '--web.enable-lifecycle'
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
+      - "--web.console.templates=/etc/prometheus/consoles"
+      - "--storage.tsdb.retention.time=200h"
+      - "--web.enable-lifecycle"
     restart: unless-stopped
     networks:
       - orchestra-network
@@ -133,7 +133,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
       GF_USERS_ALLOW_SIGN_UP: false
     volumes:
       - grafana_data:/var/lib/grafana
@@ -148,8 +148,8 @@ services:
     image: jaegertracing/all-in-one:latest
     container_name: orchestra-jaeger
     ports:
-      - "16686:16686"  # Jaeger UI
-      - "14268:14268"  # HTTP collector
+      - "16686:16686" # Jaeger UI
+      - "14268:14268" # HTTP collector
     environment:
       COLLECTOR_OTLP_ENABLED: true
     restart: unless-stopped

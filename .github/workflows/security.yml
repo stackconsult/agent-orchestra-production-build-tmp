@@ -1,0 +1,150 @@
+name: Security Checks
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  secrets-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Full history for secret scanning
+    
+    # Scan for secrets in git history
+    - name: Secret scanning with TruffleHog
+      uses: trufflesecurity/trufflehog@main
+      with:
+        path: ./
+        base: ${{ github.event.repository.default_branch }}
+        head: HEAD
+        extra_args: --only-verified
+    
+    # Scan for hardcoded credentials
+    - name: Detect secrets with detect-secrets
+      run: |
+        pip install detect-secrets
+        detect-secrets scan --all-files --force-use-all-plugins --baseline .secrets.baseline || true
+    
+    # Check for vulnerable dependencies
+    - name: Safety check (Python dependencies)
+      run: |
+        pip install safety
+        safety check --json || true
+    
+    # SAST (Static Application Security Testing)
+    - name: Bandit (Python security linter)
+      run: |
+        pip install bandit
+        bandit -r q-and-a-orchestra-agent/ -f json -o bandit-report.json || true
+    
+    - name: Semgrep (SAST)
+      uses: returntocorp/semgrep-action@v1
+      with:
+        config: >-
+          p/security-audit
+          p/owasp-top-ten
+          p/cwe-top-25
+
+  code-scanning:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: python
+    
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+    
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+
+  dependency-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Run OWASP Dependency-Check
+      uses: dependency-check/Dependency-Check_Action@main
+      with:
+        project: 'Agent Orchestra'
+        path: '.'
+        format: 'JSON'
+        args: >
+          --enable-retired
+
+  container-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build Docker image
+      run: |
+        cd q-and-a-orchestra-agent
+        docker build -t orchestra:test .
+    
+    - name: Scan with Trivy
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'orchestra:test'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+    
+    - name: Upload Trivy results to GitHub Security
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  env-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Check for hardcoded secrets in env examples
+      run: |
+        # Ensure .env.example doesn't have real values
+        if grep -E "(sk-ant-|sk-|ghp_|password=.*[^=]$)" q-and-a-orchestra-agent/.env.example; then
+          echo "ERROR: Real credentials found in .env.example"
+          exit 1
+        fi
+        
+        # Check docker-compose for default passwords
+        if grep -E "POSTGRES_PASSWORD.*password|REDIS_PASSWORD.*redis" q-and-a-orchestra-agent/docker-compose*.yml; then
+          echo "ERROR: Default passwords found in docker-compose"
+          exit 1
+        fi
+        
+        # Check for wildcard CORS
+        if grep -r "allow_origins=\[\"\*\"\]" q-and-a-orchestra-agent/; then
+          echo "ERROR: Wildcard CORS found"
+          exit 1
+        fi
+
+  security-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        cd q-and-a-orchestra-agent
+        pip install -r requirements.txt
+        pip install pytest pytest-asyncio
+    
+    - name: Run security tests
+      run: |
+        cd q-and-a-orchestra-agent
+        pytest tests/test_security.py -v || true

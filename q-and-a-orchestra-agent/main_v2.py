@@ -36,6 +36,12 @@ from core.enterprise.budget_management import BudgetManager, BudgetLevel
 from core.enterprise.audit_logging import AuditLogger, AuditAction
 from core.enterprise.analytics import AnalyticsEngine
 
+# Security components
+from middleware.rate_limiting import RateLimitMiddleware
+from middleware.security_headers import SecurityHeadersMiddleware, ErrorHandlingMiddleware, RequestSizeLimitMiddleware
+from schemas.request_validation import InvokeModelRequest, SessionCreateRequest
+from security.prompt_injection_detector import injection_detector
+
 # Existing components
 from orchestrator.orchestrator import OrchestraOrchestrator
 from integrations.repo_reader import UnifiedRepositoryReader
@@ -261,13 +267,19 @@ app = FastAPI(
 )
 
 # Add CORS middleware
+from config.cors_config import get_cors_config
+
+cors_config = get_cors_config()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    **cors_config
 )
+
+# Add security middlewares (order matters)
+app.add_middleware(RequestSizeLimitMiddleware, max_size_mb=10)
+app.add_middleware(RateLimitMiddleware)
+app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(ErrorHandlingMiddleware)
 
 # Add tenant middleware
 @app.middleware("http")
