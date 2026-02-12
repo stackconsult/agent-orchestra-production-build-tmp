@@ -192,11 +192,9 @@ Claude: I'll build a 4-agent orchestration system. Here's the architecture:
 You: Yes, but add approval gates for production deploys
 
 Claude: [creates complete system with approval gates]
-```
 
 #### Creating a Full-Stack App
 
-```
 You: Build a workflow automation dashboard:
      - Frontend: Electron app with React
      - Backend: Python FastAPI
@@ -207,7 +205,7 @@ Claude: I'll create a complete 3-tier app. Structure:
         - Frontend: Electron + React + TypeScript
         - Backend: FastAPI with 11 REST endpoints + WebSocket
         - Database: 9 tables with proper indexes
-        
+
         I'll include:
         - JWT authentication
         - Real-time updates via WebSocket
@@ -221,8 +219,6 @@ You: Yes, and add support for multiple LLM providers
 Claude: [creates complete app with Claude + OpenAI integration]
 
 #### Refactoring Messy Code
-
-```
 
 You: This planner.py has no error handling and the executor.py crashes
      constantly. Also need CI/CD and proper secrets management.
@@ -242,8 +238,6 @@ You: Yes, show me the refactored planner first
 
 Claude: [shows improved planner with comprehensive error handling]
 
-```
-
 ---
 
 ## 🎨 Advanced Features
@@ -252,19 +246,16 @@ Claude: [shows improved planner with comprehensive error handling]
 
 Preview plans before execution:
 
-```
-
+```text
 You: Show me what deploying to production would do, but don't execute yet
 
 Claude: [generates complete plan with steps, timing, costs, risks]
 
-```
+Claude: [generates complete plan with steps, timing, costs, risks]
 
 ### Cost Awareness
 
 Track and estimate cloud costs:
-
-```
 
 You: What will this system cost to run?
 
@@ -274,13 +265,9 @@ Claude: Estimated monthly costs:
         - LLM calls: ~$50/month (1000 requests)
         Total: ~$140/month
 
-```
-
 ### Multi-Turn Context
 
 Build iteratively without repeating yourself:
-
-```
 
 You: Add error handling to the planner
 
@@ -293,8 +280,6 @@ Claude: [adds metrics, remembers context from earlier changes]
 You: Update the README to document these features
 
 Claude: [updates README based on all previous changes]
-
-```
 
 ---
 
