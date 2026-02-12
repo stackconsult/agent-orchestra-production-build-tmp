@@ -68,8 +68,6 @@ cd q-and-a-orchestra-agent
 
 python main_v2.py
 
-```
-
 ---
 
 ## 🔒 Security (Enterprise-Grade)
@@ -94,16 +92,6 @@ This system implements comprehensive security controls with **A+ security rating
 ./scripts/security_verification.sh
 
 # Expected: 32/32 checks PASSED ✅
-```
-
-### 📋 Security Checklist
-
-- ✅ No hardcoded credentials
-- ✅ No wildcard CORS origins  
-- ✅ Comprehensive input validation
-- ✅ Rate limiting and DoS protection
-- ✅ Automated security scanning (CI/CD)
-- ✅ Production-ready deployment configs
 
 **📖 Detailed security documentation**: See `SECURITY_HARDENING_CHECKLIST.md`
 
@@ -231,16 +219,16 @@ Claude: I'll create a complete 3-tier app. Structure:
 You: Yes, and add support for multiple LLM providers
 
 Claude: [creates complete app with Claude + OpenAI integration]
-```
 
 #### Refactoring Messy Code
 
 ```
-You: This planner.py has no error handling and the executor.py crashes 
+
+You: This planner.py has no error handling and the executor.py crashes
      constantly. Also need CI/CD and proper secrets management.
 
 Claude: I'll refactor both files and add operational infrastructure:
-        
+
         Improvements:
         1. planner.py - retry logic, circuit breaker, validation
         2. executor.py - timeout management, metrics, resource cleanup
@@ -253,6 +241,7 @@ Claude: I'll refactor both files and add operational infrastructure:
 You: Yes, show me the refactored planner first
 
 Claude: [shows improved planner with comprehensive error handling]
+
 ```
 
 ---
@@ -264,9 +253,11 @@ Claude: [shows improved planner with comprehensive error handling]
 Preview plans before execution:
 
 ```
+
 You: Show me what deploying to production would do, but don't execute yet
 
 Claude: [generates complete plan with steps, timing, costs, risks]
+
 ```
 
 ### Cost Awareness
@@ -274,6 +265,7 @@ Claude: [generates complete plan with steps, timing, costs, risks]
 Track and estimate cloud costs:
 
 ```
+
 You: What will this system cost to run?
 
 Claude: Estimated monthly costs:
@@ -281,6 +273,7 @@ Claude: Estimated monthly costs:
         - Database: $15/month
         - LLM calls: ~$50/month (1000 requests)
         Total: ~$140/month
+
 ```
 
 ### Multi-Turn Context
@@ -288,6 +281,7 @@ Claude: Estimated monthly costs:
 Build iteratively without repeating yourself:
 
 ```
+
 You: Add error handling to the planner
 
 Claude: [adds error handling]
@@ -299,6 +293,7 @@ Claude: [adds metrics, remembers context from earlier changes]
 You: Update the README to document these features
 
 Claude: [updates README based on all previous changes]
+
 ```
 
 ---
@@ -443,11 +438,13 @@ The specific version will get you production-ready code immediately.
 Start small, build up:
 
 ```
+
 1. "Create the core agent architecture"
 2. "Add error handling and retries"
 3. "Now add observability"
 4. "Create the CI/CD pipeline"
 5. "Add secrets management"
+
 ```
 
 ### Ask for Options
@@ -455,17 +452,19 @@ Start small, build up:
 When unsure:
 
 ```
+
 You: Should I use Postgres or MongoDB for this?
 
-Claude: For your use case (structured workflow data with relationships), 
+Claude: For your use case (structured workflow data with relationships),
         I recommend Postgres because:
         - Strong ACID guarantees
         - JSON support (JSONB) for flexible fields
         - Better tooling for migrations
         - Your team already knows SQL
-        
+
         MongoDB would be better if you had truly schema-less data.
         Want to proceed with Postgres?
+
 ```
 
 ### Request Explanations
@@ -473,6 +472,7 @@ Claude: For your use case (structured workflow data with relationships),
 For learning:
 
 ```
+
 You: Why did you use a circuit breaker here?
 
 Claude: Circuit breaker prevents cascading failures:
@@ -481,8 +481,9 @@ Claude: Circuit breaker prevents cascading failures:
         - Waits 60s for service to recover
         - Tests with limited requests (HALF_OPEN)
         - Closes if recovery confirmed
-        
+
         Without it, failed service could overwhelm your system.
+
 ```
 
 ---
@@ -490,6 +491,7 @@ Claude: Circuit breaker prevents cascading failures:
 ## 📦 What's Included
 
 ```
+
 agent-orchestra-production-build-tmp/
 ├── README.md                           # This file (user guide)
 ├── SECURITY_HARDENING_CHECKLIST.md      # Comprehensive security documentation
@@ -539,6 +541,7 @@ agent-orchestra-production-build-tmp/
 ├── refactoring.md                      # Code refactoring strategies
 ├── tech-stack-guide.md                 # Technology stack guide
 └── skill.json                          # Skill metadata for Claude
+
 ```
 
 ---
