@@ -422,112 +422,21 @@ The specific version will get you production-ready code immediately.
 
 Start small, build up:
 
-```
-
-1. "Create the core agent architecture"
-2. "Add error handling and retries"
-3. "Now add observability"
-4. "Create the CI/CD pipeline"
-5. "Add secrets management"
-
-```
 
 ### Ask for Options
 
 When unsure:
 
-```
-
-You: Should I use Postgres or MongoDB for this?
-
-Claude: For your use case (structured workflow data with relationships),
-        I recommend Postgres because:
-        - Strong ACID guarantees
-        - JSON support (JSONB) for flexible fields
-        - Better tooling for migrations
-        - Your team already knows SQL
-
-        MongoDB would be better if you had truly schema-less data.
-        Want to proceed with Postgres?
-
-```
 
 ### Request Explanations
 
 For learning:
 
-```
-
-You: Why did you use a circuit breaker here?
-
-Claude: Circuit breaker prevents cascading failures:
-        - After 5 failed calls to external service
-        - Opens circuit (rejects new requests)
-        - Waits 60s for service to recover
-        - Tests with limited requests (HALF_OPEN)
-        - Closes if recovery confirmed
-
-        Without it, failed service could overwhelm your system.
-
-```
 
 ---
 
 ## 📦 What's Included
 
-```
-
-agent-orchestra-production-build-tmp/
-├── README.md                           # This file (user guide)
-├── SECURITY_HARDENING_CHECKLIST.md      # Comprehensive security documentation
-├── INSTALL.md                          # Installation and setup instructions
-├── LICENSE                             # MIT License
-├── .github/workflows/                  # CI/CD pipeline with security scanning
-│   └── security.yml                    # Automated security checks
-├── q-and-a-orchestra-agent/            # Main application directory
-│   ├── main.py                         # Original FastAPI application
-│   ├── main_updated.py                 # Enhanced version with local routing
-│   ├── main_v2.py                      # Enterprise v2 with multi-tenancy
-│   ├── config/                         # Configuration files
-│   │   └── cors_config.py              # Environment-based CORS security
-│   ├── schemas/                        # Pydantic validation schemas
-│   │   └── request_validation.py       # Input validation & sanitization
-│   ├── middleware/                     # Security and utility middleware
-│   │   ├── rate_limiting.py            # Rate limiting & DoS protection
-│   │   └── security_headers.py         # Security headers & error handling
-│   ├── security/                       # Security components
-│   │   └── prompt_injection_detector.py # Prompt injection detection
-│   ├── core/                           # Core v2 enterprise components
-│   │   ├── model_router.py             # Intelligent model routing
-│   │   ├── enterprise/                 # Enterprise features
-│   │   │   ├── multi_tenancy.py        # Multi-tenant support
-│   │   │   ├── budget_management.py    # Cost-aware orchestration
-│   │   │   └── audit_logging.py         # Compliance audit logging
-│   │   └── validation/                 # Content validation
-│   │       ├── toxicity_checker.py      # Content safety detection
-│   │       └── task_validators.py       # Task-specific validation
-│   ├── deployment/                     # Deployment configurations
-│   │   ├── kubernetes/                 # K8s manifests for production
-│   │   ├── docker/                     # Docker configurations
-│   │   └── grafana/                    # Grafana dashboards
-│   ├── scripts/                        # Utility scripts
-│   │   ├── start_dev.sh                # Secure development startup
-│   │   └── security_verification.sh    # Security validation script
-│   ├── tests/                          # Test suites
-│   │   └── test_security.py            # Security test suite
-│   ├── requirements.txt                # Python dependencies
-│   ├── docker-compose.yml              # Development environment
-│   ├── docker-compose.v2.yml           # Production environment
-│   └── .env.example                    # Environment variables template
-├── architecture-patterns.md             # Architecture design patterns
-├── best-practices.md                   # Development best practices
-├── full-stack.md                       # Full-stack development guide
-├── multi-agent.md                      # Multi-agent system patterns
-├── refactoring.md                      # Code refactoring strategies
-├── tech-stack-guide.md                 # Technology stack guide
-└── skill.json                          # Skill metadata for Claude
-
-```
 
 ---
 
@@ -566,18 +475,6 @@ kubectl apply -f deployment/kubernetes/
 
 # Production (Docker Compose)
 docker-compose -f docker-compose.v2.yml up -d
-```
-
-### 🔧 Configuration
-
-```bash
-# Environment setup
-cp q-and-a-orchestra-agent/.env.example q-and-a-orchestra-agent/.env
-# Edit .env with your configuration
-
-# Security verification
-./scripts/security_verification.sh
-```
 
 ### 📊 Monitoring
 
@@ -611,16 +508,11 @@ cp q-and-a-orchestra-agent/.env.example q-and-a-orchestra-agent/.env
 
 Start with something simple:
 
-```
+```text
 You: Create a simple agent that checks GitHub PR status every 5 minutes 
      and sends Slack notifications. Use MCP for GitHub access.
 
 Claude: [builds complete system with detailed implementation]
-```
-
-Then scale up to complex systems:
-
-```
 You: Build a multi-agent deployment pipeline with:
      - Code validation agent
      - Test execution agent  
@@ -630,8 +522,3 @@ You: Build a multi-agent deployment pipeline with:
      Include: Error handling, observability, CI/CD, secrets management
 
 Claude: [builds production-grade system with all components]
-```
-
-## 🎉 Ready to Build
-
-**The skill adapts to your needs. Happy building! 🚀**
