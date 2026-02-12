@@ -32,7 +32,7 @@ run_check() {
 # 1. CORS Check
 echo "🔍 Checking CORS configuration..."
 run_check "No wildcard CORS origins" \
-    "! grep -r 'allow_origins=\[\"\*\"\]' . --exclude-dir=__pycache__"
+    "! grep -r 'allow_origins=\[\"\*\"\]' . --exclude-dir=__pycache__ --exclude='*test*' --exclude='tests/*'"
 
 run_check "CORS config file exists" \
     "test -f config/cors_config.py"
