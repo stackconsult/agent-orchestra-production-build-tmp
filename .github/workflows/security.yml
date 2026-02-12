@@ -117,20 +117,21 @@ jobs:
 
       - name: Check for hardcoded secrets in env examples
         run: |
+          cd q-and-a-orchestra-agent
           # Ensure .env.example doesn't have real values (check for actual key patterns, not placeholders)
-          if grep -E "(sk-ant-[a-zA-Z0-9]{40,}|sk-[a-zA-Z0-9]{48,}|ghp_[a-zA-Z0-9]{36,})" q-and-a-orchestra-agent/.env.example; then
+          if grep -E "(sk-ant-[a-zA-Z0-9]{40,}|sk-[a-zA-Z0-9]{48,}|ghp_[a-zA-Z0-9]{36,})" .env.example; then
             echo "ERROR: Real credentials found in .env.example"
             exit 1
           fi
 
           # Check docker-compose for default passwords
-          if grep -E "POSTGRES_PASSWORD.*password|REDIS_PASSWORD.*redis|GF_SECURITY_ADMIN_PASSWORD.*admin" q-and-a-orchestra-agent/docker-compose*.yml; then
+          if grep -E "POSTGRES_PASSWORD.*password|REDIS_PASSWORD.*redis|GF_SECURITY_ADMIN_PASSWORD.*admin" docker-compose*.yml; then
             echo "ERROR: Default passwords found in docker-compose"
             exit 1
           fi
 
           # Check for wildcard CORS
-          if grep -r "allow_origins=\[\"\*\"\]" q-and-a-orchestra-agent/ --exclude-dir=tests; then
+          if grep -r "allow_origins=\[\"\*\"\]" . --exclude-dir=tests; then
             echo "ERROR: Wildcard CORS found"
             exit 1
           fi
