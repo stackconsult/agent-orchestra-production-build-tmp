@@ -13,53 +13,62 @@ This repository transforms the original Agent-orchestra-planner into a cost-effe
 1. **Local Models (Recommended)**: Install Ollama
 
    ```bash
-   # Install Ollama
-   curl -fsSL https://ollama.ai/install.sh | sh
-   
-   # Pull some models
-   ollama pull llama3-8b-instruct
-   ollama pull qwen2.5-3b-instruct
-   ```
 
-2. **Python Environment**: Python 3.11+
+# Install Ollama
+
+curl -fsSL <https://ollama.ai/install.sh> | sh
+
+# Pull some models
+
+ollama pull llama3-8b-instruct
+ollama pull qwen2.5-3b-instruct
+
+1. **Python Environment**: Python 3.11+
 
    ```bash
-   python -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt
-   ```
+
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 
 ### Installation
 
 1. **Clone and Setup**:
 
    ```bash
-   git clone <repo-url>
-   cd agent-orchestra-local-llm-router
-   cp q-and-a-orchestra-agent/.env.example q-and-a-orchestra-agent/.env
-   ```
 
-2. **Configure Environment**:
+git clone <repo-url>
+cd agent-orchestra-local-llm-router
+cp q-and-a-orchestra-agent/.env.example q-and-a-orchestra-agent/.env
 
-   ```bash
-   # Edit .env file
-   MODEL_ROUTING_MODE=local-preferred
-   OLLAMA_BASE_URL=http://localhost:11434
-   # Optional cloud keys for fallback
-   ANTHROPIC_API_KEY=your_key_here
-   ```
-
-3. **Start the Service**:
+1. **Configure Environment**:
 
    ```bash
-   cd q-and-a-orchestra-agent
-   
-   # For development (with security)
-   ./scripts/start_dev.sh
-   
-   # Or directly
-   python main_v2.py
-   ```
+
+# Edit .env file
+
+MODEL_ROUTING_MODE=local-preferred
+OLLAMA_BASE_URL=<http://localhost:11434>
+
+# Optional cloud keys for fallback
+
+ANTHROPIC_API_KEY=your_key_here
+
+1. **Start the Service**:
+
+   ```bash
+
+cd q-and-a-orchestra-agent
+
+# For development (with security)
+
+./scripts/start_dev.sh
+
+# Or directly
+
+python main_v2.py
+
+```
 
 ---
 
@@ -173,7 +182,7 @@ Seamlessly works with:
 
 #### Building a Multi-Agent System
 
-```
+```text
 You: I need a continuous deployment system with multiple agents:
      - Code checker validates commits
      - Test runner executes test suites
@@ -537,7 +546,7 @@ agent-orchestra-production-build-tmp/
 ## 🚦 Quick Reference
 
 | Task | Command Example |
-|------|----------------|
+|------|-----------------|
 | **Multi-agent system** | "Build a deployment automation system with MCP integration" |
 | **Full-stack app** | "Create a workflow dashboard with React, FastAPI, Postgres" |
 | **Refactor code** | "Add error handling, logging, and CI/CD to this system" |
@@ -634,5 +643,7 @@ You: Build a multi-agent deployment pipeline with:
 
 Claude: [builds production-grade system with all components]
 ```
+
+## 🎉 Ready to Build
 
 **The skill adapts to your needs. Happy building! 🚀**
