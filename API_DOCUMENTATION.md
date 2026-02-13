@@ -148,7 +148,7 @@ Content-Type: application/json
 
 Response (Server-Sent Events):
 
-```
+```text
 data: {"type": "start", "session_id": "sess_123"}
 
 data: {"type": "token", "content": "I'll"}

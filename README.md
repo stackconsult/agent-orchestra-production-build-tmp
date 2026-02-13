@@ -238,7 +238,7 @@ cd q-and-a-orchestra-agent
 
 ### Project Structure
 
-```
+```text
 q-and-a-orchestra-agent/
 ├── agents/              # Specialized AI agents
 ├── core/                # Core routing and orchestration
@@ -376,4 +376,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Built with ❤️ for the developer community**
+## Acknowledgments
+
+Built with ❤️ for the developer community
