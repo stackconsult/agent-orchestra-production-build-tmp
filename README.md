@@ -19,7 +19,7 @@ Agent Orchestra is a comprehensive AI-powered development assistant that:
 
 ### 🏗️ System Architecture
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    API Gateway (FastAPI)                    │
 ├─────────────────────────────────────────────────────────────┤
@@ -121,6 +121,7 @@ The API will be available at `http://localhost:8000`
 ### Core Endpoints
 
 #### Chat with the Orchestra
+
 ```http
 POST /v2/chat
 Content-Type: application/json
@@ -137,17 +138,20 @@ Authorization: Bearer <token>
 ```
 
 #### List Available Models
+
 ```http
 GET /v2/models
 Authorization: Bearer <token>
 ```
 
 #### Health Check
+
 ```http
 GET /health
 ```
 
 #### Analytics Dashboard
+
 ```http
 GET /v2/analytics/dashboard?start_date=2024-01-01&end_date=2024-01-31
 Authorization: Bearer <token>
@@ -195,29 +199,34 @@ cd q-and-a-orchestra-agent
 ## 🏢 Enterprise Features (v2)
 
 ### Multi-Tenancy
+
 - Tenant isolation at all levels
 - Per-tenant configurations and quotas
 - Tenant-specific analytics and reporting
 
 ### Budget Management
+
 - Cost tracking per tenant/model
 - Configurable budget limits
 - Automatic spending alerts
 - Cost optimization recommendations
 
 ### Advanced Analytics
+
 - Real-time usage metrics
 - Model performance analytics
 - Cost analysis and trends
 - Custom dashboards
 
 ### Semantic Caching
+
 - Intelligent response caching
 - Semantic similarity matching
 - Reduced API costs and latency
 - Cache invalidation strategies
 
 ### Model Discovery
+
 - Automatic model discovery
 - Capability assessment
 - Performance benchmarking
@@ -278,11 +287,13 @@ bandit -r .
 ## 📊 Monitoring & Observability
 
 ### Health Checks
+
 ```bash
 curl http://localhost:8000/health
 ```
 
 ### Metrics
+
 - Request latency and throughput
 - Model usage statistics
 - Error rates and types
@@ -290,6 +301,7 @@ curl http://localhost:8000/health
 - Cache hit rates
 
 ### Logging
+
 - Structured JSON logging
 - Configurable log levels
 - Audit trail for all actions
@@ -348,7 +360,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - **Documentation**: See the `/docs` directory
 - **Issues**: Create an issue on GitHub
-- **Security**: Report security issues to security@example.com
+- **Security**: Report security issues to <security@example.com>
 
 ---
 
