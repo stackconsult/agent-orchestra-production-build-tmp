@@ -10,30 +10,30 @@ data:
   API_HOST: "0.0.0.0"
   API_PORT: "8000"
   DEBUG: "false"
-  
+
   # Observability
   PROMETHEUS_PORT: "9090"
   LOG_LEVEL: "INFO"
   LOG_FORMAT: "json"
-  
+
   # Rate Limits
   MAX_DESIGN_ITERATIONS_PER_HOUR: "50"
   MAX_IMPLEMENTATIONS_PER_DAY: "10"
   MAX_CONCURRENT_OPERATIONS: "3"
-  
+
   # Cost Tracking
   MONTHLY_BUDGET_LIMIT: "500"
   COST_ALERT_THRESHOLD: "0.8"
-  
+
   # Redis Configuration
   REDIS_URL: "redis://redis-service:6379/0"
-  
+
   # Database Configuration
-  DATABASE_URL: "postgresql+asyncpg://orchestra:orchestra_password@postgres-service:5432/orchestra_planner"
-  
+  DATABASE_URL: "postgresql+asyncpg://orchestra:${POSTGRES_PASSWORD}@postgres-service:5432/orchestra_planner"
+
   # Jaeger Configuration
   JAEGER_ENDPOINT: "http://jaeger-service:14268/api/traces"
-  
+
   # GitHub Configuration (to be overridden by secrets)
   GITHUB_REPO_OWNER: "stackconsult"
   GITHUB_REPO_NAME: "Agent-orchestra-planner"
@@ -51,10 +51,10 @@ data:
     global:
       scrape_interval: 15s
       evaluation_interval: 15s
-    
+
     rule_files:
       - "/etc/prometheus/rules/*.yml"
-    
+
     scrape_configs:
       - job_name: 'orchestra-agent'
         static_configs:
@@ -71,7 +71,7 @@ data:
         static_configs:
           - targets: ['postgres-service:5432']
         scrape_interval: 30s
-    
+
     alerting:
       alertmanagers:
         - static_configs:
@@ -90,18 +90,18 @@ data:
     [server]
     http_port = 3000
     domain = ""
-    
+
     [security]
     admin_user = admin
     admin_password = admin
-    
+
     [database]
     type = postgres
     host = postgres-service
     name = grafana
     user = grafana
     password = grafana_password
-    
+
     [log]
     mode = console
     level = info

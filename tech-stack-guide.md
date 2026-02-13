@@ -7,6 +7,7 @@ Quick reference for technologies used by this skill.
 ## Python Backend
 
 ### FastAPI (Primary)
+
 ```python
 from fastapi import FastAPI, Depends
 from pydantic import BaseModel
@@ -26,6 +27,7 @@ async def create_item(item: Item):
 **Alternatives:** Flask (simpler), Django (full-featured)
 
 ### SQLAlchemy 2.0
+
 ```python
 from sqlalchemy import Column, String
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
@@ -42,6 +44,7 @@ class User(Base):
 **Key features:** Async support, migrations (Alembic), type hints
 
 ### Pydantic
+
 ```python
 from pydantic import BaseModel, Field, validator
 
@@ -63,6 +66,7 @@ class Config(BaseModel):
 ## TypeScript Frontend
 
 ### React + TypeScript
+
 ```typescript
 interface Props {
   name: string;
@@ -88,6 +92,7 @@ export const Component: React.FC<Props> = ({ name, onUpdate }) => {
 **Key libraries:** React Query, Zustand, Tailwind CSS
 
 ### Electron
+
 ```typescript
 import { app, BrowserWindow } from 'electron';
 
@@ -115,6 +120,7 @@ app.whenReady().then(createWindow);
 ## Databases
 
 ### Postgres
+
 ```sql
 -- JSONB for flexible data
 CREATE TABLE workflows (
@@ -134,6 +140,7 @@ SELECT * FROM workflows WHERE config @> '{"type": "deploy"}';
 **Key features:** JSONB, arrays, full-text search, triggers
 
 ### Neon
+
 ```
 Serverless Postgres
 - Autoscaling (scale to zero)
@@ -142,7 +149,7 @@ Serverless Postgres
 - Generous free tier
 
 Connection string:
-postgresql://user:pass@ep-xyz.neon.tech/dbname
+postgresql://user:password@ep-xyz.neon.tech/dbname
 ```
 
 **When to use:** Postgres without managing servers  
@@ -153,6 +160,7 @@ postgresql://user:pass@ep-xyz.neon.tech/dbname
 ## Cloud Platforms
 
 ### GCP
+
 ```bash
 # Cloud Run (serverless containers)
 gcloud run deploy api \
@@ -169,6 +177,7 @@ chat = ChatModel.from_pretrained("chat-bison")
 **Key services:** Cloud Run, Vertex AI, GCS, BigQuery
 
 ### AWS
+
 ```bash
 # Lambda functions
 aws lambda create-function \
@@ -188,6 +197,7 @@ aws secretsmanager get-secret-value \
 ## LLM Providers
 
 ### Anthropic Claude
+
 ```python
 import anthropic
 
@@ -206,6 +216,7 @@ response = client.messages.create(
 **Models:** Opus (most capable), Sonnet (balanced), Haiku (fast)
 
 ### OpenAI
+
 ```python
 from openai import OpenAI
 
@@ -227,6 +238,7 @@ response = client.chat.completions.create(
 ## MCP Integration
 
 ### MCP Client
+
 ```python
 import httpx
 
@@ -255,6 +267,7 @@ class MCPClient:
 ## Development Tools
 
 ### Testing
+
 ```python
 # pytest
 pip install pytest pytest-asyncio pytest-cov
@@ -263,10 +276,11 @@ pip install pytest pytest-asyncio pytest-cov
 pytest tests/ -v --cov=app
 
 # Integration tests
-pytest tests/integration/ --db=postgresql://test
+pytest tests/integration/ --db=postgresql://user:password@localhost/testdb
 ```
 
 ### Linting
+
 ```bash
 # Python
 black .           # Formatter
@@ -280,6 +294,7 @@ tsc --noEmit      # Type checker
 ```
 
 ### CI/CD
+
 ```yaml
 # GitHub Actions
 - uses: actions/setup-python@v5
@@ -300,6 +315,7 @@ test:
 ## Monitoring
 
 ### Structured Logging
+
 ```python
 import structlog
 
@@ -314,6 +330,7 @@ logger.info(
 ```
 
 ### Prometheus Metrics
+
 ```python
 from prometheus_client import Counter, Histogram
 
@@ -329,6 +346,7 @@ request_duration.observe(0.234)
 ## Quick Stack Recommendations
 
 ### Startup MVP
+
 ```
 Frontend: React + Vite
 Backend: FastAPI
@@ -338,6 +356,7 @@ LLM: Claude Sonnet
 ```
 
 ### Production SaaS
+
 ```
 Frontend: React + TypeScript + Electron
 Backend: FastAPI + async workers
@@ -349,6 +368,7 @@ Monitoring: Prometheus + Grafana
 ```
 
 ### Enterprise
+
 ```
 Frontend: React + TypeScript
 Backend: FastAPI + microservices
