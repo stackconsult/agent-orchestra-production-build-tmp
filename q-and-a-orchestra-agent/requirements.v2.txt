@@ -34,7 +34,7 @@ asyncpg==0.29.0
 # VECTOR DATABASE
 # =============================================================================
 # Weaviate (primary vector DB)
-weaviate-client==4.1.1
+weaviate-client==4.19.2
 
 # Alternative: Pinecone (uncomment if using Pinecone)
 # pinecone-client==3.0.0
@@ -57,8 +57,8 @@ sentence-transformers==2.2.2
 
 # Transformers for validation and analysis
 transformers==4.36.0
-torch==2.1.0
-torchvision==0.16.0
+torch==2.10.0
+torchvision==0.21.0
 
 # NumPy for numerical operations
 numpy==1.24.4
