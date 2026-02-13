@@ -48,7 +48,7 @@ pytest-cov==6.0.0
 pytest-mock==3.14.0
 
 # Code quality
-black==25.1.0
+black==24.3.0
 pylint==3.3.2
 mypy==1.15.0
 
@@ -58,7 +58,7 @@ kubernetes==35.0.0
 
 # Utils - Updated to secure versions
 pyyaml==6.0.1
-requests==2.32.5
+requests==2.32.4
 httpx==0.28.1
 urllib3==2.6.3  # Fixed vulnerable version
 uuid==1.30
