@@ -25,7 +25,7 @@ httpx==0.25.0
 psycopg[binary]==3.1.12
 SQLAlchemy==2.0.23
 alembic==1.13.0
-timescaledb==5.0.0
+# Note: TimescaleDB uses PostgreSQL, handled by asyncpg/psycopg
 
 # Async PostgreSQL driver
 asyncpg==0.29.0
