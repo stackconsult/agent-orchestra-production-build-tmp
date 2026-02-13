@@ -7,7 +7,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class MessageType(str, Enum):
@@ -66,8 +66,7 @@ class AgentMessage(BaseModel):
     requires_approval: bool = False
     session_id: Optional[UUID] = None
     
-    class Config:
-        use_enum_values = True
+    model_config = ConfigDict(use_enum_values=True)
 
 
 class RequirementsPayload(BaseModel):
