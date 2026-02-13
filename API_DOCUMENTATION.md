@@ -6,7 +6,7 @@ Agent Orchestra provides a RESTful API for interacting with AI agents and managi
 
 ## Base URL
 
-```
+```text
 Development: http://localhost:8000
 Production: https://your-domain.com
 ```
@@ -32,6 +32,7 @@ Content-Type: application/json
 ```
 
 Response:
+
 ```json
 {
   "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
@@ -51,6 +52,7 @@ GET /health
 ```
 
 Response:
+
 ```json
 {
   "status": "healthy",
@@ -100,6 +102,7 @@ Authorization: Bearer <token>
 ```
 
 Response:
+
 ```json
 {
   "session_id": "sess_123456789",
@@ -144,6 +147,7 @@ Content-Type: application/json
 ```
 
 Response (Server-Sent Events):
+
 ```
 data: {"type": "start", "session_id": "sess_123"}
 
@@ -164,6 +168,7 @@ Authorization: Bearer <token>
 ```
 
 Response:
+
 ```json
 {
   "models": [
@@ -213,6 +218,7 @@ Authorization: Bearer <token>
 ```
 
 Response:
+
 ```json
 {
   "period": {
@@ -266,6 +272,7 @@ Authorization: Bearer <token>
 ```
 
 Response:
+
 ```json
 {
   "current_period": {
@@ -305,6 +312,7 @@ Authorization: Bearer <token>
 ```
 
 Response:
+
 ```json
 {
   "task_id": "task_789012",
@@ -314,6 +322,7 @@ Response:
 ```
 
 Check discovery status:
+
 ```http
 GET /v2/discovery/status/{task_id}
 ```
@@ -328,6 +337,7 @@ Authorization: Bearer <token>
 ```
 
 Response:
+
 ```json
 {
   "recommendations": [
@@ -412,6 +422,7 @@ The API uses standard HTTP status codes:
 | 500 | Internal Server Error |
 
 Error response format:
+
 ```json
 {
   "error": {
@@ -437,6 +448,7 @@ Error response format:
 | /auth/* | 5 requests | 1 minute |
 
 Rate limit headers are included in responses:
+
 ```
 X-RateLimit-Limit: 10
 X-RateLimit-Remaining: 7
@@ -512,6 +524,7 @@ Content-Type: application/json
 ```
 
 Webhook payload:
+
 ```json
 {
   "event": "chat.completed",
@@ -533,6 +546,7 @@ GET /v2/analytics/requests?page=1&limit=50&sort=timestamp
 ```
 
 Response:
+
 ```json
 {
   "data": [...],
@@ -550,6 +564,7 @@ Response:
 ## Support
 
 For API support:
-- Documentation: https://docs.agent-orchestra.com
-- Issues: https://github.com/stackconsult/agent-orchestra/issues
-- Email: api-support@agent-orchestra.com
+
+- Documentation: <https://docs.agent-orchestra.com>
+- Issues: <https://github.com/stackconsult/agent-orchestra/issues>
+- Email: <api-support@agent-orchestra.com>
