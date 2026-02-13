@@ -1,8 +1,8 @@
 # Core dependencies
-fastapi==0.109.0
+fastapi==0.129.0
 uvicorn[standard]==0.24.0
-pydantic==2.5.0
-pydantic-settings==2.1.0
+pydantic==2.10.4
+pydantic-settings==2.7.0
 python-multipart==0.0.6
 
 # Async
@@ -42,15 +42,15 @@ opentelemetry-sdk==1.21.0
 redis==5.0.1
 
 # Testing
-pytest==7.4.3
-pytest-asyncio==0.21.1
-pytest-cov==4.1.0
-pytest-mock==3.12.0
+pytest==8.3.4
+pytest-asyncio==0.25.3
+pytest-cov==6.0.0
+pytest-mock==3.14.0
 
 # Code quality
-black==23.12.0
-pylint==3.0.0
-mypy==1.7.0
+black==25.1.0
+pylint==3.3.2
+mypy==1.15.0
 
 # DevOps
 docker==7.0.0
@@ -58,9 +58,9 @@ kubernetes==35.0.0
 
 # Utils - Updated to secure versions
 pyyaml==6.0.1
-requests==2.32.3
+requests==2.32.5
 httpx==0.28.1
-urllib3==2.6.0  # Fixed vulnerable version
+urllib3==2.6.3  # Fixed vulnerable version
 uuid==1.30
 tiktoken==0.5.2
 
