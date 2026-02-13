@@ -54,31 +54,8 @@ jobs:
         continue-on-error: true
 
       - name: Semgrep (SAST) - Comprehensive Scan
-        uses: returntocorp/semgrep-action@v1
-        with:
-          config: >-
-            p/security-audit
-            p/owasp-top-ten
-            p/cwe-top-25
-            p/python
-            p/sql
-            p/command-injection
-            p/privilege-escalation
-          semgrep_args: >
-            --verbose
-            --no-git-ignore
-            --include="*.py"
-            --include="*.js"
-            --include="*.ts"
-            --include="*.yml"
-            --include="*.yaml"
-            --include="*.json"
-            --exclude="**/__pycache__/**"
-            --exclude="**/node_modules/**"
-            --exclude="**/.git/**"
-            --severity=INFO
-            --autofix
-            --max-target-bytes=1000000
+        run: |
+          docker run --rm -v "${{ github.workspace }}:/src" returntocorp/semgrep semgrep scan --config=p/security-audit --config=p/owasp-top-ten --config=p/cwe-top-25 --config=p/python --config=p/sql --config=p/command-injection --config=p/privilege-escalation --verbose --no-git-ignore --include="*.py" --include="*.js" --include="*.ts" --include="*.yml" --include="*.yaml" --include="*.json" --exclude="**/__pycache__/**" --exclude="**/node_modules/**" --exclude="**/.git/**" --severity=INFO --autofix --max-target-bytes=1000000 --sarif . > semgrep-results.sarif
         env:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
         continue-on-error: true
