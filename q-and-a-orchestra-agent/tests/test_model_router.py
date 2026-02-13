@@ -91,27 +91,29 @@ class TestModelRouter:
     @pytest.fixture
     def mock_clients(self):
         """Create mock provider clients."""
+        from unittest.mock import AsyncMock
+        
         clients = {}
         
         # Mock Ollama client
         ollama_client = MagicMock()
-        ollama_client.invoke.return_value = {
+        ollama_client.invoke = AsyncMock(return_value={
             "content": "Local model response",
             "model": "llama3-8b-instruct",
             "provider": "ollama",
             "usage": {"input_tokens": 10, "output_tokens": 5, "total_tokens": 15}
-        }
+        })
         ollama_client.health_check.return_value = True
         clients["ollama"] = ollama_client
         
         # Mock Anthropic client
         anthropic_client = MagicMock()
-        anthropic_client.invoke.return_value = {
+        anthropic_client.invoke = AsyncMock(return_value={
             "content": "Cloud model response",
             "model": "claude-3-5-sonnet",
             "provider": "anthropic",
             "usage": {"input_tokens": 10, "output_tokens": 5, "total_tokens": 15}
-        }
+        })
         anthropic_client.health_check.return_value = True
         clients["anthropic"] = anthropic_client
         

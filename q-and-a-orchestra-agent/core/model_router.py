@@ -7,11 +7,11 @@ from .task_profiles import TaskProfile
 from .model_registry import ModelRegistry
 from .policy_engine import ModelPolicyEngine, ScoredModel
 from .telemetry import Telemetry
-from ..providers.base_client import BaseModelClient
-from ..providers.ollama_client import OllamaClient
-from ..providers.openai_client import OpenAIClient
-from ..providers.anthropic_client import AnthropicClient
-from ..providers.generic_openai_client import GenericOpenAIClient
+from providers.base_client import BaseModelClient
+from providers.ollama_client import OllamaClient
+from providers.openai_client import OpenAIClient
+from providers.anthropic_client import AnthropicClient
+from providers.generic_openai_client import GenericOpenAIClient
 
 logger = logging.getLogger(__name__)
 

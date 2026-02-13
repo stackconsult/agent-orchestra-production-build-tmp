@@ -66,7 +66,7 @@ class RepositoryAnalyzerAgent:
                 agent_id=self.agent_id,
                 intent="repository_analysis_completed",
                 message_type=MessageType.REPO_ANALYSIS_COMPLETED,
-                payload=payload.dict(),
+                payload=payload.model_dump(),
                 session_id=message.session_id
             )
             

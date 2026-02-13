@@ -8,7 +8,7 @@ capabilities, and benchmark results.
 from datetime import datetime
 from enum import Enum
 from typing import Dict, List, Optional, Any
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class QualityTier(str, Enum):
@@ -92,9 +92,7 @@ class ModelProfile(BaseModel):
     last_health_check: Optional[datetime] = None
     health_check_failures: int = 0
     
-    class Config:
-        """Pydantic configuration."""
-        use_enum_values = True
+    model_config = ConfigDict(use_enum_values=True)
         
     def update_benchmarks(self, new_results: List[BenchmarkResult]) -> None:
         """Update benchmark results and recalculate averages."""
