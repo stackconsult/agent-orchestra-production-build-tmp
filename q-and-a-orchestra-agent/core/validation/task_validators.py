@@ -408,11 +408,51 @@ class MathValidator(TaskValidator):
                 # Only allow safe characters and use ast.literal_eval for safety
                 if re.match(r'^[0-9+\-*/().\s^%]+$', expr_safe):
                     import ast
+                    import operator
                     try:
-                        # Use ast.literal_eval for safety, but it doesn't handle all math expressions
-                        # For simple arithmetic, we can use eval with restricted context
-                        allowed_names = {}
-                        result = eval(expr_safe, {"__builtins__": {}}, allowed_names)  # nosec: B307
+                        # Use safe arithmetic evaluation instead of eval
+                        def safe_eval(expr):
+                            """Safely evaluate arithmetic expressions."""
+                            allowed_operators = {
+                                ast.Add: operator.add,
+                                ast.Sub: operator.sub,
+                                ast.Mult: operator.mul,
+                                ast.Div: operator.truediv,
+                                ast.Pow: operator.pow,
+                                ast.Mod: operator.mod,
+                                ast.USub: operator.neg,
+                                ast.UAdd: operator.pos,
+                            }
+                            
+                            node = ast.parse(expr, mode='eval')
+                            def eval_node(node):
+                                if isinstance(node, ast.Expression):
+                                    return eval_node(node.body)
+                                elif isinstance(node, ast.Num):  # Python < 3.8
+                                    return node.n
+                                elif isinstance(node, ast.Constant):  # Python >= 3.8
+                                    return node.value
+                                elif isinstance(node, ast.BinOp):
+                                    left = eval_node(node.left)
+                                    right = eval_node(node.right)
+                                    op_type = type(node.op)
+                                    if op_type in allowed_operators:
+                                        return allowed_operators[op_type](left, right)
+                                    else:
+                                        raise ValueError(f"Unsupported operator: {op_type}")
+                                elif isinstance(node, ast.UnaryOp):
+                                    operand = eval_node(node.operand)
+                                    op_type = type(node.op)
+                                    if op_type in allowed_operators:
+                                        return allowed_operators[op_type](operand)
+                                    else:
+                                        raise ValueError(f"Unsupported unary operator: {op_type}")
+                                else:
+                                    raise ValueError(f"Unsupported expression: {type(node)}")
+                            
+                            return eval_node(node)
+                        
+                        result = safe_eval(expr_safe)
                         
                         # Check if result is reasonable
                         if abs(result) > 1000000:

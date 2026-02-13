@@ -7,6 +7,7 @@ Supports hierarchical tenant organization with complete data isolation.
 
 import asyncio
 import logging
+import re
 from typing import Dict, List, Optional, Any, Set
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -264,22 +265,34 @@ class MultiTenancyManager:
     
     async def _create_tenant_schema(self, schema_name: str):
         """Create database schema for tenant."""
+        # Validate schema name to prevent SQL injection
+        if not re.match(r'^[a-zA-Z][a-zA-Z0-9_]*$', schema_name):
+            raise ValueError(f"Invalid schema name: {schema_name}")
+        
         async with self.engine.begin() as conn:
-            await conn.execute(text(f"CREATE SCHEMA IF NOT EXISTS {schema_name}"))
+            # Use parameterized queries for schema operations
+            await conn.execute(text("CREATE SCHEMA IF NOT EXISTS :schema_name"), {"schema_name": schema_name})
             # Grant permissions
-            await conn.execute(text(f"GRANT ALL ON SCHEMA {schema_name} TO current_user"))
+            await conn.execute(text("GRANT ALL ON SCHEMA :schema_name TO current_user"), {"schema_name": schema_name})
     
     async def _drop_tenant_schema(self, schema_name: str):
         """Drop tenant database schema."""
+        # Validate schema name to prevent SQL injection
+        if not re.match(r'^[a-zA-Z][a-zA-Z0-9_]*$', schema_name):
+            raise ValueError(f"Invalid schema name: {schema_name}")
+        
         async with self.engine.begin() as conn:
-            await conn.execute(text(f"DROP SCHEMA IF EXISTS {schema_name} CASCADE"))
+            await conn.execute(text("DROP SCHEMA IF EXISTS :schema_name CASCADE"), {"schema_name": schema_name})
     
     async def _create_tenant_session(self, schema_name: Optional[str]) -> AsyncSession:
         """Create database session for tenant."""
         session = self.session_factory()
         if schema_name:
+            # Validate schema name to prevent SQL injection
+            if not re.match(r'^[a-zA-Z][a-zA-Z0-9_]*$', schema_name):
+                raise ValueError(f"Invalid schema name: {schema_name}")
             # Set search_path to tenant schema
-            await session.execute(text(f"SET search_path TO {schema_name}, public"))
+            await session.execute(text("SET search_path TO :schema_name, public"), {"schema_name": schema_name})
         return session
     
     async def _create_vector_namespace(self, namespace: str):

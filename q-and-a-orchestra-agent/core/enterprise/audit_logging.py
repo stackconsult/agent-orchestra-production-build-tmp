@@ -229,53 +229,47 @@ class AuditLogger:
         severity: Optional[AuditSeverity] = None,
         start_time: Optional[datetime] = None,
         end_time: Optional[datetime] = None,
+        resource_type: Optional[str] = None,
+        ip_address: Optional[str] = None,
         limit: int = 1000,
         offset: int = 0
     ) -> List[AuditEvent]:
         """Query audit events with filters."""
         try:
             async with self.session_factory() as session:
-                # Build query
+                # Build query using SQLAlchemy ORM operators instead of text()
+                from sqlalchemy import desc
+                
+                # Start with base query
+                query = select(AuditLog).order_by(desc(AuditLog.timestamp))
+                
+                # Apply filters using ORM operators
                 conditions = []
-                params = {}
-                
                 if tenant_id:
-                    conditions.append("tenant_id = :tenant_id")
-                    params["tenant_id"] = tenant_id
-                
+                    conditions.append(AuditLog.tenant_id == tenant_id)
                 if user_id:
-                    conditions.append("user_id = :user_id")
-                    params["user_id"] = user_id
-                
+                    conditions.append(AuditLog.user_id == user_id)
                 if action:
-                    conditions.append("action = :action")
-                    params["action"] = action.value
-                
+                    conditions.append(AuditLog.action == action.value)
                 if severity:
-                    conditions.append("severity = :severity")
-                    params["severity"] = severity.value
-                
+                    conditions.append(AuditLog.severity == severity.value)
                 if start_time:
-                    conditions.append("timestamp >= :start_time")
-                    params["start_time"] = start_time
-                
+                    conditions.append(AuditLog.timestamp >= start_time)
                 if end_time:
-                    conditions.append("timestamp <= :end_time")
-                    params["end_time"] = end_time
+                    conditions.append(AuditLog.timestamp <= end_time)
+                if resource_type:
+                    conditions.append(AuditLog.resource_type == resource_type)
+                if ip_address:
+                    conditions.append(AuditLog.ip_address == ip_address)
                 
-                where_clause = " AND ".join(conditions) if conditions else "1=1"
+                if conditions:
+                    query = query.where(and_(*conditions))
                 
-                query = text(f"""
-                    SELECT * FROM audit_logs
-                    WHERE {where_clause}
-                    ORDER BY timestamp DESC
-                    LIMIT :limit OFFSET :offset
-                """)
+                # Apply pagination
+                query = query.limit(limit).offset(offset)
                 
-                params.update({"limit": limit, "offset": offset})
-                
-                result = await session.execute(query, params)
-                rows = result.fetchall()
+                result = await session.execute(query)
+                rows = result.scalars().all()
                 
                 events = []
                 for row in rows:
